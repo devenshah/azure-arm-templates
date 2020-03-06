@@ -2,10 +2,10 @@
 
 ## Prerequisites
 
-### Azure CLI
-
+- Azure CLI  
 Execute following command on elevated powershell window  
 `Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi; Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'`
+- Powershell  
 
 ## Useful links
 
@@ -17,10 +17,13 @@ Execute following command on elevated powershell window
 - Login  
 `az login`
 - Declare variable  
-`$rgName = 'azure-template-rg'`
+`$rgName = 'azure-template-rg'`  
+`$rgLocation = 'eastus'`
 - Create resource group  
-`az group create -l westus -n $rgName`
+`az group create -l $rgLocation -n $rgName`
 - Deploy template to the group  
 `az group deployment create -g $rgName --template-file azuredeploy.json`
+  - add following for parameters  
+    `--parameters location=$rgLocation`
 - Clear down  
 `az group delete -n $rgName`
