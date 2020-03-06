@@ -10,9 +10,9 @@
         "accountName": "azure-template-rg-cdb",
         "databaseName": "employees",
         "collections": [
-            "personalData",
-            "department",
-            "ranks"
+            {"name": "personalData" },
+            {"name": "department"},
+            {"name": "ranks"}
         ]
     },
     "resources": [
@@ -51,15 +51,15 @@
         },
         {
             "type": "Microsoft.DocumentDb/databaseAccounts/mongodbDatabases/collections",
-            "name": "[concat(variables('accountName'), '/', variables('databaseName'), '/', variables('collections')[copyIndex()])]",
+            "name": "[concat(variables('accountName'), '/', variables('databaseName'), '/', variables('collections')[copyIndex()].name)]",
             "apiVersion": "2019-08-01",
             "dependsOn": [ "[resourceId('Microsoft.DocumentDB/databaseAccounts/mongodbDatabases', variables('accountName'), variables('databaseName'))]" ],
             "properties":
             {
                 "resource":{
-                    "id":  "[variables('collections')[copyIndex()]]"
+                    "id":  "[variables('collections')[copyIndex()].name]"
                 },
-                "options": { "throughput": "400" }
+                "options": { "throughput": "500" }
             },
             "copy":{
                 "name":"collectionsCopy",
