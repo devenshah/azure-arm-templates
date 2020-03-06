@@ -46,8 +46,7 @@
             "properties":{
                 "resource":{
                     "id": "[variables('databaseName')]"
-                },
-                "options": { "throughput": "400" }
+                }
             }
         },
         {
@@ -58,9 +57,9 @@
             "properties":
             {
                 "resource":{
-                    "id":  "[variables('collections')[copyIndex()]]",
-                    "shardKey": { "user_id": "Hash" }
-                }
+                    "id":  "[variables('collections')[copyIndex()]]"
+                },
+                "options": { "throughput": "400" }
             },
             "copy":{
                 "name":"collectionsCopy",
