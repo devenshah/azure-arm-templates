@@ -9,7 +9,11 @@
     "variables": {
         "accountName": "azure-template-rg-cdb",
         "databaseName": "employees",
-        "collection1Name": "personalData"
+        "collection1Name": "personalData",
+        "collections": [
+            "department",
+            "ranks"
+        ]
     },
     "resources": [
         {
@@ -70,6 +74,23 @@
                         "If-Match": "<ETag>"
                     }
                 }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDb/databaseAccounts/mongodbDatabases/collections",
+            "name": "[concat(variables('accountName'), '/', variables('databaseName'), '/', variables('collections')[copyIndex()])]",
+            "apiVersion": "2019-08-01",
+            "dependsOn": [ "[resourceId('Microsoft.DocumentDB/databaseAccounts/mongodbDatabases', variables('accountName'), variables('databaseName'))]" ],
+            "properties":
+            {
+                "resource":{
+                    "id":  "[variables('collections')[copyIndex()]]",
+                    "shardKey": { "user_id": "Hash" }
+                }
+            },
+            "copy":{
+                "name":"collectionsCopy",
+                "count": "[length(variables('collections'))]"
             }
         }
     ]
