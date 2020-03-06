@@ -8,13 +8,13 @@ _https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/templat
 
 # Execute command on powershell  
 _https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest_
-- Login  
+- Login (in browser)  
 `az login`
-
+- Declare variable  
+`$rgName = 'azure-template-rg'`
 - Create resource group  
-`az group create -l westus -n firsttemplate-rg`
-
+`az group create -l westus -n $rgName`
 - Deploy template to the group  
-`az group deployment create -g firsttemplate-rg --template-file azuredeploy.json`
-
+`az group deployment create -g $rgName --template-file azuredeploy.json`
 - Clear down  
+`az group delete -n $rgName
