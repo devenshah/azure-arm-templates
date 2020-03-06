@@ -9,8 +9,8 @@
     "variables": {
         "accountName": "azure-template-rg-cdb",
         "databaseName": "employees",
-        "collection1Name": "personalData",
         "collections": [
+            "personalData",
             "department",
             "ranks"
         ]
@@ -48,32 +48,6 @@
                     "id": "[variables('databaseName')]"
                 },
                 "options": { "throughput": "400" }
-            }
-        },
-        {
-            "type": "Microsoft.DocumentDb/databaseAccounts/mongodbDatabases/collections",
-            "name": "[concat(variables('accountName'), '/', variables('databaseName'), '/', variables('collection1Name'))]",
-            "apiVersion": "2019-08-01",
-            "dependsOn": [ "[resourceId('Microsoft.DocumentDB/databaseAccounts/mongodbDatabases', variables('accountName'), variables('databaseName'))]" ],
-            "properties":
-            {
-                "resource":{
-                    "id":  "[variables('collection1Name')]",
-                    "shardKey": { "user_id": "Hash" },
-                    "indexes": [
-                        {
-                            "key": { "keys":["user_id", "user_address"] },
-                            "options": { "unique": "true" }
-                        },
-                        {
-                            "key": { "keys":["_ts"] },
-                            "options": { "expireAfterSeconds": "2629746" }
-                        }
-                    ],
-                    "options": {
-                        "If-Match": "<ETag>"
-                    }
-                }
             }
         },
         {
