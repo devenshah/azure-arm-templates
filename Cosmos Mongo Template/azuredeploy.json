@@ -10,9 +10,9 @@
         "accountName": "azure-template-rg-cdb",
         "databaseName": "employees",
         "collections": [
-            {"name": "personalData" },
-            {"name": "department"},
-            {"name": "ranks"}
+            {"name": "personalData", "throughput": 400 },
+            {"name": "department", "throughput": 500},
+            {"name": "ranks", "throughput": 600}
         ]
     },
     "resources": [
@@ -59,7 +59,7 @@
                 "resource":{
                     "id":  "[variables('collections')[copyIndex()].name]"
                 },
-                "options": { "throughput": "500" }
+                "options": { "throughput": "[variables('collections')[copyIndex()].throughput]" }
             },
             "copy":{
                 "name":"collectionsCopy",
