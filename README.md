@@ -15,12 +15,14 @@ Execute following command on elevated powershell window
 ## Steps to deploy azure template using powershell
 
 - Login  
-`az login`
+`az login` or `az login --use-device-code`
 - Declare variable  
 `$rgName = 'azure-template-rg'`  
 `$rgLocation = 'eastus'`
 - Create resource group  
 `az group create -l $rgLocation -n $rgName`
+- Validate template before deployment  
+`az group deployment validate -g $rgName --template-file azuredeploy.json --parameters location=$rgLocation`
 - Deploy template to the group  
 `az group deployment create -g $rgName --template-file azuredeploy.json`
   - add following for parameters  

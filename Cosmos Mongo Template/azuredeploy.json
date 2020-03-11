@@ -65,6 +65,29 @@
                 "name":"collectionsCopy",
                 "count": "[length(variables('collections'))]"
             }
+        },
+        {
+            "type": "Microsoft.DocumentDb/databaseAccounts/mongodbDatabases/collections",
+            "name": "[concat(variables('accountName'), '/', variables('databaseName'), '/companies')]",
+            "apiVersion": "2019-08-01",
+            "dependsOn": [ "[resourceId('Microsoft.DocumentDB/databaseAccounts/mongodbDatabases', variables('accountName'), variables('databaseName'))]" ],
+            "properties":
+            {
+                "resource":{
+                    "id":  "companies",
+                    "indexes": [
+                        {
+                            "key": { "keys":["user_id", "user_address"] },
+                            "options": { "unique": "true" }
+                        },
+                        {
+                            "key": { "keys":["_ts"] },
+                            "options": { "expireAfterSeconds": "2629746" }
+                        }
+                    ]
+                },
+                "options": { "throughput": "400" }
+            }
         }
     ]
 }
