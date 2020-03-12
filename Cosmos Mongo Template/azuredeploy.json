@@ -4,6 +4,63 @@
     "parameters": {
         "location": {
             "type": "string"
+        },
+        "cosmosCollectionsArray": {
+            "type": "array",
+            "defaultValue" : [
+                {
+                    "name": "apprenticeships",
+                    "throughput": 400
+                },
+                {
+                    "name": "traineeships",
+                    "throughput": 400
+                },
+                {
+                    "name": "auditItems",
+                    "throughput": 400
+                }
+            ]
+        },
+        "cosmosCollectionIndexesArray": {
+            "type": "array",
+            "defaultValue" : [
+                {
+                    "name": "apprenticeships",
+                    "indexes": [
+                        {
+                            "key": { "keys":["Vacancy._id", "CandidateId"] },
+                            "options": { "unique": "true" }
+                        },
+                        {
+                            "key": { "keys": ["Vacancy._id"] }
+                        },
+                        {
+                            "key": { "keys": ["CandidateId"] }
+                        }
+                    ]
+                },
+                {
+                    "name": "traineeships",
+                    "indexes": [
+                        {
+                            "key": { "keys":["Vacancy._id", "CandidateId"] },
+                            "name" : "Vacancy._id_1_CandidateId_1",
+                            "options": { "unique": "true" }
+                        },
+                        {
+                            "key": { "keys": ["Vacancy._id"] }
+                        },
+                        {
+                            "key": { "keys": ["CandidateId"] }
+                        }
+                    ]
+                },
+                {
+                    "name": "auditItems",
+                    "indexes": []
+                }
+            ]
         }
     },
     "variables": {
@@ -12,32 +69,27 @@
         "collections": [
             {
                 "name": "personalData", 
-                "throughput": 400,
+                "throughput": 400, 
                 "indexes": [
                     {
-                        "key": { "keys":["user_id", "user_address"] },
+                        "key": { "keys":["company_id", "company_address"] },
                         "options": { "unique": "true" }
-                    },
-                    {
-                        "key": { "keys":["_ts"] },
-                        "options": { "expireAfterSeconds": "2629746" }
                     }
-                ]
+                ] 
             },
             {
                 "name": "department", 
-                "throughput": 500,
+                "throughput": 400,
                 "indexes": [
                     {
-                        "key": { "keys":["user_id", "user_address"] },
-                        "options": { "unique": "true" }
+                        "key": { "keys": [ "name" ]}
                     }
                 ]
             },
             {
                 "name": "ranks", 
-                "throughput": 600,
-                "indexes":[]
+                "throughput": 400,
+                "indexes": []
             }
         ]
     },
@@ -114,6 +166,24 @@
                     ]
                 },
                 "options": { "throughput": "400" }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDb/databaseAccounts/mongodbDatabases/collections",
+            "name": "[concat(variables('accountName'), '/', variables('databaseName'), '/', parameters('cosmosCollectionsArray')[copyIndex()].name)]",
+            "apiVersion": "2019-08-01",
+            "dependsOn": [ "[resourceId('Microsoft.DocumentDB/databaseAccounts/mongodbDatabases', variables('accountName'), variables('databaseName'))]" ],
+            "properties":
+            {
+                "resource":{
+                    "id":  "[parameters('cosmosCollectionsArray')[copyIndex()].name]",
+                    "indexes": "[parameters('cosmosCollectionIndexesArray')[copyIndex()].indexes]"
+                },
+                "options": { "throughput": "[parameters('cosmosCollectionsArray')[copyIndex()].throughput]" }
+            },
+            "copy":{
+                "name":"collectionsCopy",
+                "count": "[length(parameters('cosmosCollectionsArray'))]"
             }
         }
     ]
