@@ -10,9 +10,35 @@
         "accountName": "azure-template-rg-cdb",
         "databaseName": "employees",
         "collections": [
-            {"name": "personalData", "throughput": 400 },
-            {"name": "department", "throughput": 500},
-            {"name": "ranks", "throughput": 600}
+            {
+                "name": "personalData", 
+                "throughput": 400,
+                "indexes": [
+                    {
+                        "key": { "keys":["user_id", "user_address"] },
+                        "options": { "unique": "true" }
+                    },
+                    {
+                        "key": { "keys":["_ts"] },
+                        "options": { "expireAfterSeconds": "2629746" }
+                    }
+                ]
+            },
+            {
+                "name": "department", 
+                "throughput": 500,
+                "indexes": [
+                    {
+                        "key": { "keys":["user_id", "user_address"] },
+                        "options": { "unique": "true" }
+                    }
+                ]
+            },
+            {
+                "name": "ranks", 
+                "throughput": 600,
+                "indexes":[]
+            }
         ]
     },
     "resources": [
@@ -57,7 +83,8 @@
             "properties":
             {
                 "resource":{
-                    "id":  "[variables('collections')[copyIndex()].name]"
+                    "id":  "[variables('collections')[copyIndex()].name]",
+                    "indexes": "[variables('collections')[copyIndex()].indexes]"
                 },
                 "options": { "throughput": "[variables('collections')[copyIndex()].throughput]" }
             },

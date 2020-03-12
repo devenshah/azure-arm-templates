@@ -24,6 +24,8 @@ Execute following command on elevated powershell window
 - Validate template before deployment  
 `az group deployment validate -g $rgName --template-file azuredeploy.json --parameters location=$rgLocation`
 - Deploy template to the group  
+  - add following to see logs, the logs are also available on the portal
+    `-- debug`
 `az group deployment create -g $rgName --template-file azuredeploy.json`
   - add following for parameters  
     `--parameters location=$rgLocation`
