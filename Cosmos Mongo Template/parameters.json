@@ -1,0 +1,111 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "cosmosCollectionsArray": {
+        "value": [
+            {
+                "name": "apprenticeships",
+                "shardKey": {
+                    "CandidateId": "Hash"
+                },
+                "throughput": 400
+            }, {
+                "name": "candidates",
+                "shardKey": {},
+                "throughput": 400
+            }, {
+                "name": "savedSearches",
+                "shardKey": {},
+                "throughput": 400
+            }, {
+                "name": "users",
+                "shardKey": {},
+                "throughput": 400
+            }
+        ]
+      },
+      "cosmosCollectionIndexesArray": {
+          "value": [
+            {
+                "name": "apprenticeships",
+                "indexes": [
+                    {
+                        "key": { "keys":["Vacancy._id", "CandidateId"] },
+                        "options": { "unique": "true" }
+                    },
+                    {
+                        "key": { "keys": ["Vacancy._id"] }
+                    },
+                    {
+                        "key": { "keys": ["CandidateId"] }
+                    }
+                ]
+            },
+            {
+                "name": "candidates",
+                "indexes": [
+                    {
+                        "key": { "keys": ["SubscriberId"] }
+                    },
+                    {
+                        "key": { "keys": ["CommunicationPreferences.VerifiedMobile"] }
+                    },
+                    {
+                        "key": { "keys": ["CommunicationPreferences.MobileVerificationCode"] }
+                    },
+                    {
+                        "key": { "keys": ["RegistrationDetails.PhoneNumber"] }
+                    },
+                    {
+                        "key": { "keys": ["CommunicationPreferences.AllowTraineeshipPrompts"] }
+                    },
+                    {
+                        "key": { "keys": ["LegacyCandidateId"] }
+                    },
+                    {
+                        "key": { "keys": ["RegistrationDetails.EmailAddress"] }
+                    },
+                    {
+                        "key": { "keys": ["DateCreated"] }
+                    },
+                    {
+                        "key": { "keys": ["DateUpdated"] }
+                    },
+                    {
+                        "key": { "keys": ["RegistrationDetails.FirstName"] }
+                    },
+                    {
+                        "key": { "keys": ["RegistrationDetails.LastName"] }
+                    },
+                    {
+                        "key": { "keys": ["RegistrationDetails.DateOfBirth"] }
+                    },
+                    {
+                        "key": { "keys": ["RegistrationDetails.Address.Postcode"] }
+                    }
+                ]
+            },
+            {
+                "name": "savedsearches",
+                "indexes": []
+            },
+            {
+                "name": "users",
+                "indexes": [
+                    {
+                        "key": { "keys":["Username", "Status"] },
+                        "options": { "unique": "true" }
+                    },
+                    {
+                        "key": { "keys": ["Username"] }
+                    },
+                    {
+                        "key": { "keys": ["Status"] }
+                    }
+                ]
+            }
+        ]
+      }
+    }
+}
